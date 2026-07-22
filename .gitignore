@@ -1,0 +1,61 @@
+# Excel dosyaları yüklenmesin
+*.xlsx
+*.xls
+*.xlsm
+
+# README (yerel notlar, repo'ya yüklenmesin)
+README.txt
+
+# Ortam değişkenleri / gizli bilgiler
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+secrets.*
+credentials.*
+
+# macOS sistem dosyaları
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows sistem dosyaları
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Editör / IDE ayarları
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Claude Code yerel ayar/oturum dosyaları
+.claude/
+CLAUDE.md
+
+# Log ve geçici dosyalar
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Node.js (ileride kullanılırsa)
+node_modules/
+npm-debug.log*
+
+# Python (ileride kullanılırsa)
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Sıkıştırılmış / arşiv dosyaları (yanlışlıkla yüklenmesin diye)
+*.zip
+*.rar
+*.7z

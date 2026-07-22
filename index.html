@@ -65,6 +65,10 @@
     /* Firebrick — the boundary line itself (matches the map marker) */
     --frontier:   #b22222;
 
+    /* Category inks — sit alongside frontier/brass, same ledger register */
+    --cat-teal:   #2f6f76;
+    --cat-plum:   #6b4a86;
+
     /* Paper & brass — cadastral ledger tones and restrained accents */
     --parchment:  #f5efe3;
     --parchment-2:#efe7d7;
@@ -184,6 +188,95 @@
   }
   .fund-body{ font-size:15px; line-height:1.5; color:var(--text-soft); }
 
+  /* ---------- Filter / legend card ---------- */
+  .filter-card{
+    position:fixed; top:calc(var(--header-h) + 14px); left:14px; z-index:1500;
+    width:min(258px, calc(100vw - 28px));
+    background:linear-gradient(var(--parchment), var(--parchment-2));
+    border:1px solid var(--line); border-top:3px solid var(--brass);
+    border-radius:9px; box-shadow:var(--shadow); overflow:hidden;
+  }
+  .filter-toggle{
+    all:unset; box-sizing:border-box; cursor:pointer; width:100%;
+    display:flex; align-items:center; gap:10px; padding:12px 16px;
+    font-family:"EB Garamond", Georgia, serif; font-weight:600; font-size:15px;
+    font-variant:all-small-caps; letter-spacing:.1em; color:var(--text-soft);
+  }
+  .filter-toggle:focus-visible{ outline:2px solid var(--frontier); outline-offset:-3px; }
+  .filter-toggle .chev{ margin-left:auto; color:var(--brass); font-size:12px; transition:transform .3s ease; }
+  .filter-card.is-open .filter-toggle .chev{ transform:rotate(180deg); }
+
+  .filter-body{ max-height:0; opacity:0; overflow:hidden; transition:max-height .38s ease, opacity .3s ease; }
+  .filter-card.is-open .filter-body{ max-height:420px; opacity:1; }
+  .filter-inner{ padding:2px 16px 15px; }
+
+  .filter-count{
+    margin:0 0 12px; font-size:13px; font-style:italic; color:var(--text-soft);
+  }
+  .filter-count strong{ font-style:normal; color:var(--text); }
+
+  .filter-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px; }
+  .filter-item{
+    display:flex; align-items:center; gap:9px; padding:6px 4px; border-radius:6px;
+    cursor:pointer; user-select:none; transition:background .15s ease;
+  }
+  .filter-item:hover{ background:rgba(178,138,61,.12); }
+  .filter-item input{ position:absolute; opacity:0; width:1px; height:1px; }
+
+  .filter-swatch{
+    flex:0 0 auto; width:13px; height:13px; border-radius:50%;
+    border:2px solid rgba(255,255,255,.65); box-shadow:0 0 0 1px rgba(0,0,0,.15);
+    transition:opacity .15s ease, transform .15s ease;
+  }
+  .filter-item input:not(:checked) + .filter-swatch{ opacity:.3; transform:scale(.82); }
+
+  .filter-label{
+    flex:1 1 auto; font-size:15px; color:var(--text); line-height:1.25;
+    transition:color .15s ease, opacity .15s ease;
+  }
+  .filter-item input:not(:checked) ~ .filter-label{ color:var(--text-soft); opacity:.55; }
+  .filter-item input:focus-visible ~ .filter-label{ outline:2px solid var(--frontier); outline-offset:3px; border-radius:3px; }
+
+  .filter-n{ flex:0 0 auto; font-size:12px; color:var(--text-soft); font-variant-numeric:tabular-nums; }
+
+  .filter-rule{ height:1px; background:var(--line); margin:11px 0 9px; }
+  .filter-reset{
+    all:unset; cursor:pointer; font-size:12.5px; font-variant:all-small-caps;
+    letter-spacing:.08em; color:var(--brass); border-bottom:1px dotted var(--brass);
+  }
+  .filter-reset:hover{ color:var(--frontier); border-color:var(--frontier); }
+
+  @media (max-width:660px){
+    .filter-card{ width:min(220px, calc(100vw - 28px)); }
+  }
+
+  /* ---------- Gazetteer pin popups ---------- */
+  .leaflet-popup-content-wrapper{
+    background:linear-gradient(var(--parchment), var(--parchment-2));
+    border:1px solid var(--line); border-top:3px solid var(--brass);
+    border-radius:8px; box-shadow:var(--shadow);
+    font-family:"EB Garamond", Georgia, serif;
+  }
+  .leaflet-popup-tip{ background:var(--parchment-2); border:1px solid var(--line); border-top:none; border-left:none; }
+  .leaflet-popup-content{ margin:12px 15px; min-width:170px; }
+  .leaflet-popup-close-button{ color:var(--text-soft) !important; }
+
+  .pin-pop-cat{
+    font-size:11.5px; font-weight:600; font-variant:all-small-caps;
+    letter-spacing:.1em; margin-bottom:2px;
+  }
+  .pin-pop-name{
+    font-family:"Cormorant Garamond", Georgia, serif; font-weight:600;
+    font-size:20px; color:var(--ink); line-height:1.15; margin-bottom:5px;
+  }
+  .pin-pop-region{ font-size:14.5px; color:var(--text); margin-bottom:5px; }
+  .pin-pop-region .lbl{ font-variant:all-small-caps; letter-spacing:.06em; color:var(--text-soft); }
+  .pin-pop-coords{
+    font-size:12.5px; color:var(--text-soft); border-top:1px solid var(--line);
+    padding-top:6px; margin-top:2px;
+  }
+  .pin-pop-coords .dec{ font-variant-numeric:tabular-nums; }
+
   /* ---------- Load reveal ---------- */
   .reveal{ opacity:0; transform:translateY(7px); animation:rise .7s ease forwards; }
   .reveal.d1{ animation-delay:.05s; }
@@ -195,6 +288,7 @@
     .frontier-line{ animation:none; clip-path:inset(0 0 0 0); }
     .status .dot{ animation:none; }
     .info-body{ transition:none; }
+    .filter-body{ transition:none; }
     .reveal{ animation:none !important; opacity:1 !important; transform:none !important; }
   }
 </style>
@@ -216,6 +310,21 @@
 
             <div class="folium-map" id="map_0085dc1f084d109a69b0888ed3d67500" ></div>
 
+
+    <aside class="filter-card" id="filterCard" aria-label="Filter places by category">
+      <button class="filter-toggle" id="filterToggle" aria-expanded="true" aria-controls="filterBody">
+        Categories
+        <span class="chev" aria-hidden="true">&#9662;</span>
+      </button>
+      <div class="filter-body" id="filterBody">
+        <div class="filter-inner">
+          <p class="filter-count"><strong id="filterVisibleCount">0</strong> of <span id="filterTotalCount">0</span> places shown</p>
+          <ul class="filter-list" id="filterList"></ul>
+          <div class="filter-rule"></div>
+          <button class="filter-reset" id="filterReset" type="button">Show all</button>
+        </div>
+      </div>
+    </aside>
 
     <aside class="info-card" id="infoCard" aria-label="About this gazetteer">
       <button class="info-toggle" id="infoToggle" aria-expanded="true" aria-controls="infoBody">
@@ -246,13 +355,14 @@
                     crs: L.CRS.EPSG3857,
                     ...{
   "zoom": 8,
-  "zoomControl": true,
+  "zoomControl": false,
   "preferCanvas": false,
 }
 
                 }
             );
-            L.control.scale().addTo(map_0085dc1f084d109a69b0888ed3d67500);
+            L.control.zoom({ position: "bottomleft" }).addTo(map_0085dc1f084d109a69b0888ed3d67500);
+            L.control.scale({ position: "bottomleft" }).addTo(map_0085dc1f084d109a69b0888ed3d67500);
 
 
 
@@ -276,20 +386,125 @@
             tile_layer_e41942bcb2d6d3323cf988f5711d5e62.addTo(map_0085dc1f084d109a69b0888ed3d67500);
 
 
-            var circle_marker_2f6c66aa1df5d955f55afd454255fb4d = L.circleMarker(
-                [39.55, 22.2],
-                {"bubblingMouseEvents": true, "color": "#b22222", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b22222", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
-            ).addTo(map_0085dc1f084d109a69b0888ed3d67500);
+            var GAZETTEER_PLACES = [{"name":"Terovo","category":"Çiftlik","region":"Yanya Kazası","lat":39.411297,"lon":20.874775},{"name":"Eleousa","category":"Çiftlik","region":"Korundos Nahiyesi","lat":39.706394,"lon":20.792442},{"name":"Pournari","category":"Çiftlik","region":"Çatalca Kazası","lat":39.15665,"lon":22.307983},{"name":"Palamas","category":"Çiftlik","region":"Çatalca Kazası","lat":39.029619,"lon":22.400392},{"name":"Ekkara","category":"Çiftlik","region":"Çatalca Kazası","lat":39.1542,"lon":22.197792},{"name":"Glafyra","category":"Çiftlik","region":"Golos Kazası","lat":39.440364,"lon":22.888531},{"name":"Gelanthi","category":"Çiftlik","region":"Kardiçe Kazası","lat":39.438658,"lon":21.708117},{"name":"Mouzaki","category":"Çiftlik","region":"Kardiçe Kazası","lat":39.429536,"lon":21.662064},{"name":"Kappadokiko","category":"Çiftlik","region":"Kardiçe Kazası","lat":39.2659,"lon":22.141881},{"name":"Giannota","category":"Çiftlik","region":"Alasonya Kazası","lat":39.978997,"lon":22.043475},{"name":"Sykia","category":"Çiftlik","region":"Alasonya Kazası","lat":39.830281,"lon":22.052433},{"name":"Evangelismos","category":"Çiftlik","region":"Alasonya Kazası","lat":39.838947,"lon":22.102925},{"name":"Thesprotiko","category":"Karye / Çiftlik","region":"Narda Kazası","lat":39.252858,"lon":20.784289},{"name":"Filippiada","category":"Karye","region":"Narda Kazası","lat":39.207667,"lon":20.88095},{"name":"Papadates","category":"Karye","region":"Narda Kazası","lat":39.313439,"lon":20.792961},{"name":"Nikolitsi","category":"Karye / Çiftlik","region":"Narda Kazası","lat":39.312311,"lon":20.766842},{"name":"Rizvouni","category":"Karye","region":"Narda Kazası","lat":39.262606,"lon":20.806572},{"name":"Dimari","category":"Çiftlik","region":"Narda Kazası","lat":39.151872,"lon":21.154506},{"name":"Megaro","category":"Çiftlik","region":"Grebene Kazası","lat":40.113742,"lon":21.264672},{"name":"Mesolouri","category":"Çiftlik","region":"Grebene Kazası","lat":40.113358,"lon":21.151511},{"name":"Kentro","category":"Çiftlik","region":"Grebene Kazası","lat":40.018569,"lon":21.621575},{"name":"Dervitsani","category":"Çiftlik","region":"Argiri Kazası","lat":40.031675,"lon":20.178975},{"name":"Dodoni","category":"Nahiye / Çiftlik","region":"Yanya Kazası","lat":39.54325,"lon":20.773503},{"name":"Mantio","category":"Çiftlik","region":"Çerkoviste Nahiyesi","lat":39.539269,"lon":20.779592},{"name":"Mikrothives","category":"Çiftlik","region":"Armiye Kazası","lat":39.263342,"lon":22.750694},{"name":"Varlaam","category":"Çiftlik","region":"Yanya Kazası","lat":39.420794,"lon":20.893419},{"name":"Pente Pigadia","category":"Çiftlik","region":"Yanya Kazası","lat":39.386411,"lon":20.9128},{"name":"Parakalamos","category":"Çiftlik","region":"Yanya Kazası","lat":39.860644,"lon":20.567897},{"name":"Chrysorrachi","category":"Çiftlik","region":"Yanya Kazası","lat":39.831014,"lon":20.613825},{"name":"Delvinakopoulo","category":"Çiftlik","region":"Yanya Kazası","lat":39.662808,"lon":20.656008},{"name":"Derviziana","category":"Çiftlik","region":"Yanya Kazası","lat":39.400844,"lon":20.782125},{"name":"Anthochori","category":"Çiftlik","region":"Yanya Kazası","lat":39.733642,"lon":21.129892},{"name":"Petralona","category":"Çiftlik","region":"Yanya Kazası","lat":39.664086,"lon":20.740194},{"name":"Areti","category":"Çiftlik","region":"Yanya Kazası","lat":39.829769,"lon":20.581481},{"name":"Asprochori","category":"Çiftlik","region":"Yanya Kazası","lat":39.522347,"lon":20.730589},{"name":"Chouliarades","category":"Çiftlik","region":"Yanya Kazası","lat":39.549492,"lon":21.006697},{"name":"Stavraki","category":"Çiftlik","region":"Yanya Kazası","lat":39.655233,"lon":20.817458},{"name":"Marmara","category":"Çiftlik","region":"Yanya Kazası","lat":39.654822,"lon":20.794672},{"name":"Vounoplagia","category":"Çiftlik","region":"Yanya Kazası","lat":39.691586,"lon":20.784503},{"name":"Katsikas","category":"Çiftlik","region":"Yanya Kazası","lat":39.622225,"lon":20.887428},{"name":"Kalentzi","category":"Çiftlik","region":"Yanya Kazası","lat":39.490375,"lon":20.977344},{"name":"Krapsi","category":"Çiftlik","region":"Yanya Kazası","lat":39.644606,"lon":21.030372},{"name":"Mavronoros","category":"Çiftlik","region":"Yanya Kazası","lat":39.857383,"lon":20.539914},{"name":"Mouzakei","category":"Çiftlik","region":"Yanya Kazası","lat":39.573875,"lon":20.950317},{"name":"Megalo Peristeri","category":"Çiftlik","region":"Yanya Kazası","lat":39.723433,"lon":21.062278},{"name":"Vargiades","category":"Çiftlik","region":"Yanya Kazası","lat":39.465178,"lon":20.810403},{"name":"Petrovouni","category":"Çiftlik","region":"Yanya Kazası","lat":39.573508,"lon":21.005239},{"name":"Klimatia","category":"Çiftlik","region":"Yanya Kazası","lat":39.704528,"lon":20.6716},{"name":"Agios Christoforos","category":"Çiftlik","region":"Yanya Kazası","lat":39.637269,"lon":20.628839},{"name":"Polygyros","category":"Çiftlik","region":"Yanya Kazası","lat":39.576653,"lon":20.664194},{"name":"Fotino","category":"Çiftlik","region":"Yanya Kazası","lat":39.749572,"lon":20.534969},{"name":"Rizo","category":"Çiftlik","region":"Yanya Kazası","lat":39.705747,"lon":20.532214},{"name":"Vlochos","category":"Çiftlik","region":"Yenişehir Kazası","lat":39.520414,"lon":22.090556},{"name":"Sofu","category":"Çiftlik","region":"Yenişehir Kazası","lat":39.467258,"lon":22.499492},{"name":"Servota","category":"Çiftlik","region":"Tırhala Kazası","lat":39.504125,"lon":21.908331},{"name":"Mavrommati","category":"Çiftlik","region":null,"lat":39.423997,"lon":21.696128},{"name":"Gefiria","category":"Çiftlik","region":null,"lat":39.29155,"lon":22.191806},{"name":"Artesiano","category":"Çiftlik","region":null,"lat":39.402278,"lon":21.897492}];
 
+            var CAT_COLORS = {
+                "Çiftlik": "#b22222",
+                "Karye": "#2f6f76",
+                "Karye / Çiftlik": "#b28a3d",
+                "Nahiye / Çiftlik": "#6b4a86"
+            };
+            var DEFAULT_COLOR = "#5b5241";
 
-            circle_marker_2f6c66aa1df5d955f55afd454255fb4d.bindTooltip(
-                `<div>
-                     Thessaly, Greece
-                 </div>`,
-                {
-  "sticky": true,
-}
-            );
+            function catColor(cat) {
+                return CAT_COLORS[cat] || DEFAULT_COLOR;
+            }
+
+            function escapeHtml(str) {
+                return String(str).replace(/[&<>"']/g, function (c) {
+                    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+                });
+            }
+
+            // One Leaflet layer group per category, so filter checkboxes can toggle them.
+            var categoryLayers = {};
+            var categoryCounts = {};
+
+            GAZETTEER_PLACES.forEach(function (p) {
+                if (!categoryLayers[p.category]) {
+                    categoryLayers[p.category] = L.layerGroup();
+                    categoryCounts[p.category] = 0;
+                }
+                categoryCounts[p.category]++;
+
+                var color = catColor(p.category);
+                var marker = L.circleMarker([p.lat, p.lon], {
+                    radius: 6,
+                    color: "#2a2118",
+                    weight: 1.5,
+                    opacity: 0.85,
+                    fill: true,
+                    fillColor: color,
+                    fillOpacity: 0.88,
+                    bubblingMouseEvents: true
+                });
+
+                var regionRow = p.region
+                    ? '<div class="pin-pop-region"><span class="lbl">Region</span> &middot; ' + escapeHtml(p.region) + '</div>'
+                    : '';
+
+                var popupHtml =
+                    '<div class="pin-pop">' +
+                        '<div class="pin-pop-cat" style="color:' + color + '">' + escapeHtml(p.category) + '</div>' +
+                        '<div class="pin-pop-name">' + escapeHtml(p.name) + '</div>' +
+                        regionRow +
+                        '<div class="pin-pop-coords">' +
+                            '<span class="dec">' + p.lat.toFixed(5) + ', ' + p.lon.toFixed(5) + '</span>' +
+                        '</div>' +
+                    '</div>';
+
+                marker.bindPopup(popupHtml);
+
+                marker.on('mouseover', function () { marker.setStyle({ radius: 8 }); });
+                marker.on('mouseout', function () { marker.setStyle({ radius: 6 }); });
+
+                marker.addTo(categoryLayers[p.category]);
+            });
+
+            var totalPlaces = GAZETTEER_PLACES.length;
+            document.getElementById('filterTotalCount').textContent = totalPlaces;
+
+            function updateVisibleCount() {
+                var visible = 0;
+                Object.keys(categoryLayers).forEach(function (cat) {
+                    var cb = document.querySelector('.filter-item input[data-cat="' + cat + '"]');
+                    if (cb && cb.checked) visible += categoryCounts[cat];
+                });
+                document.getElementById('filterVisibleCount').textContent = visible;
+            }
+
+            // Build the legend/filter list, ordered by frequency (most common category first).
+            var filterListEl = document.getElementById('filterList');
+            Object.keys(categoryLayers)
+                .sort(function (a, b) { return categoryCounts[b] - categoryCounts[a]; })
+                .forEach(function (cat) {
+                    categoryLayers[cat].addTo(map_0085dc1f084d109a69b0888ed3d67500);
+
+                    var li = document.createElement('li');
+                    var id = 'cat-' + cat.replace(/[^a-zA-Z0-9]+/g, '-');
+                    li.innerHTML =
+                        '<label class="filter-item" for="' + id + '">' +
+                            '<input type="checkbox" id="' + id + '" data-cat="' + escapeHtml(cat) + '" checked>' +
+                            '<span class="filter-swatch" style="background:' + catColor(cat) + '"></span>' +
+                            '<span class="filter-label">' + escapeHtml(cat) + '</span>' +
+                            '<span class="filter-n">' + categoryCounts[cat] + '</span>' +
+                        '</label>';
+                    filterListEl.appendChild(li);
+                });
+
+            filterListEl.addEventListener('change', function (e) {
+                var input = e.target;
+                if (!input.matches('input[data-cat]')) return;
+                var cat = input.getAttribute('data-cat');
+                if (input.checked) {
+                    categoryLayers[cat].addTo(map_0085dc1f084d109a69b0888ed3d67500);
+                } else {
+                    map_0085dc1f084d109a69b0888ed3d67500.removeLayer(categoryLayers[cat]);
+                }
+                updateVisibleCount();
+            });
+
+            document.getElementById('filterReset').addEventListener('click', function () {
+                filterListEl.querySelectorAll('input[data-cat]').forEach(function (input) {
+                    if (!input.checked) {
+                        input.checked = true;
+                        categoryLayers[input.getAttribute('data-cat')].addTo(map_0085dc1f084d109a69b0888ed3d67500);
+                    }
+                });
+                updateVisibleCount();
+            });
+
+            updateVisibleCount();
 
 </script>
 
@@ -313,6 +528,24 @@
     // Make sure Leaflet measures the map area correctly beneath the fixed header.
     window.addEventListener('load', function () {
       try { map_0085dc1f084d109a69b0888ed3d67500.invalidateSize(); } catch (e) {}
+    });
+  })();
+
+  (function () {
+    var card = document.getElementById('filterCard');
+    var btn  = document.getElementById('filterToggle');
+
+    function setOpen(open) {
+      card.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    // Open by default on wider screens; on phones, stay tucked away so it
+    // doesn't stack on top of the info card and swallow the map.
+    setOpen(window.matchMedia('(min-width: 661px)').matches);
+
+    btn.addEventListener('click', function () {
+      setOpen(!card.classList.contains('is-open'));
     });
   })();
 </script>
