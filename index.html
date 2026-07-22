@@ -247,7 +247,12 @@
   .filter-reset:hover{ color:var(--frontier); border-color:var(--frontier); }
 
   @media (max-width:660px){
-    .filter-card{ width:min(220px, calc(100vw - 28px)); }
+    /* Stack the two cards top-right / bottom-right instead of side by side,
+       so they never overlap on narrow screens. */
+    .filter-card{
+      top:auto; left:auto; bottom:14px; right:14px;
+      width:min(220px, calc(100vw - 28px));
+    }
   }
 
   /* ---------- Gazetteer pin popups ---------- */
