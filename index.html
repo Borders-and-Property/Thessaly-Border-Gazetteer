@@ -100,7 +100,7 @@
     padding:9px 10px 7px; border-bottom:2px solid transparent;
   }
   .site-nav a:hover{ color:var(--on-ink); }
-  .site-nav a[aria-current="page"]{ color:var(--on-ink); border-bottom-color:var(--frontier); }
+  .site-nav a[aria-current]{ color:var(--on-ink); border-bottom-color:var(--frontier); }
   .site-nav a:focus-visible, .brand:focus-visible{ outline:2px solid var(--frontier); outline-offset:3px; }
 
   /* "In development": the hatched swatch maps use for ground not yet surveyed. */
@@ -237,9 +237,8 @@
       <nav class="site-nav" aria-label="Site">
         <a href="/">Home</a>
         <a href="/research/">Research</a>
-        <a href="/resources/"><span class="long">Digital </span>Resources</a>
+        <a href="/resources/" aria-current="location"><span class="long">Digital </span>Resources</a>
         <a href="/team/">Team</a>
-        <a href="/Thessaly-Border-Gazetteer/" aria-current="page">Gazetteer</a>
       </nav>
       <span class="dev-tag">In development</span>
     </header>
