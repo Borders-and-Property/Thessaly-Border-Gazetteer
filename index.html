@@ -116,8 +116,32 @@
   }
   @media (max-width:660px){ .head-sub{ display:none; } }
 
+  /* ---------- Site navigation (shared with the Borders and Property homepage) ---------- */
+  .site-nav{ margin-left:auto; flex:0 0 auto; display:flex; align-items:center; gap:2px; }
+  .site-nav a{
+    font-family:"EB Garamond", Georgia, serif; font-weight:600; font-size:14px;
+    font-variant:all-small-caps; letter-spacing:.14em; text-decoration:none;
+    color:var(--on-ink-soft); padding:6px 10px 4px; white-space:nowrap;
+    border-bottom:2px solid transparent; border-radius:6px 6px 0 0;
+    transition:color .15s ease, background .15s ease;
+  }
+  .site-nav a:hover{ color:var(--on-ink); background:rgba(255,255,255,.05); }
+  .site-nav a[aria-current="page"]{ color:var(--on-ink); border-bottom-color:var(--brass); }
+  .site-nav a:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
+  @media (max-width:660px){
+    /* Two rows on narrow screens: title above, navigation + status below.
+       Everything else (map, cards, frontier line) keys off --header-h and follows. */
+    :root{ --header-h: 104px; }
+    .app-header{ flex-wrap:wrap; align-content:center; gap:6px 12px; }
+    .head-titles{ flex:1 1 100%; }
+    .site-nav{ margin-left:-8px; }
+    .site-nav a{ padding:6px 8px 4px; }
+    .site-nav .long{ display:none; }   /* "Thessaly Gazetteer" -> "Gazetteer"; the title already says Thessaly */
+    .status{ margin-left:auto; font-size:13px; letter-spacing:.08em; gap:7px; padding:4px 10px 4px 9px; }
+  }
+
   .status{
-    margin-left:auto; flex:0 0 auto; display:inline-flex; align-items:center; gap:9px;
+    flex:0 0 auto; display:inline-flex; align-items:center; gap:9px;
     font-family:"EB Garamond", Georgia, serif; font-weight:600; font-size:14px;
     font-variant:all-small-caps; letter-spacing:.14em; color:var(--on-ink);
     padding:5px 14px 5px 13px; white-space:nowrap;
@@ -306,6 +330,11 @@
         <span class="head-title reveal d1">Thessaly Border Gazetteer</span>
         <span class="head-sub reveal d1">A place-name register of the Ottoman&ndash;Greek frontier in Thessaly</span>
       </div>
+
+      <nav class="site-nav reveal d2" aria-label="Site">
+        <a href="/">Home</a>
+        <a href="/Thessaly-Border-Gazetteer/" aria-current="page"><span class="long">Thessaly </span>Gazetteer</a>
+      </nav>
 
       <span class="status reveal d2"><span class="dot"></span>In Progress</span>
     </header>
